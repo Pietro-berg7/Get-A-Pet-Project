@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { createUserToken } from "../helpers/createUserToken";
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
@@ -42,8 +42,7 @@ export class UserController {
 
       await createUserToken(newUser, req, res);
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: error });
+      return res.status(500).json({ message: error });
     }
   }
 
@@ -67,6 +66,19 @@ export class UserController {
     }
 
     await createUserToken(user, req, res);
+  }
+
+  static async checkUser(req: Request, res: Response) {
+    let currentUser;
+
+    console.log(req.headers.authorization);
+
+    if (req.headers.authorization) {
+    } else {
+      currentUser = null;
+    }
+
+    res.status(200).send(currentUser);
   }
 }
 

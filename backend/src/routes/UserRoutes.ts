@@ -10,5 +10,6 @@ const router = Router();
 
 router.post("/register", validateRegisterMiddleware, UserController.register);
 router.post("/login", validateLoginMiddleware, UserController.login);
+router.get("/checkuser", UserController.checkUser);
 
 export default router;
