@@ -1,6 +1,16 @@
-const jwt = require("jsonwebtoken");
+import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 
-const createUserToken = async (user, req, res) => {
+interface User {
+  name: string;
+  _id: string;
+}
+
+export const createUserToken = async (
+  user: User,
+  req: Request,
+  res: Response
+): Promise<void> => {
   // create a token
   const token = jwt.sign(
     {
@@ -17,5 +27,3 @@ const createUserToken = async (user, req, res) => {
     userId: user._id,
   });
 };
-
-module.exports = createUserToken;
