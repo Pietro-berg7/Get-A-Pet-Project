@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import { default as connection } from "../../config/db";
+import mongoose, { Schema, Model, Document } from "mongoose";
+import { IPet } from "../interfaces/IPet";
 
-const petSchema = new mongoose.Schema(
+const petSchema: Schema = new Schema(
   {
     name: {
       type: String,
@@ -28,15 +28,18 @@ const petSchema = new mongoose.Schema(
       default: true,
     },
     user: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
     },
     adopter: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
     },
   },
   { timestamps: true }
 );
 
-export const Pet = mongoose.model("Pet", petSchema);
+export const User: Model<IPet & Document> = mongoose.model<IPet & Document>(
+  "Pet",
+  petSchema
+);

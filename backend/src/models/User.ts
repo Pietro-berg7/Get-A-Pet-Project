@@ -1,13 +1,8 @@
-import mongoose, { Schema, Model, Document, Types } from "mongoose";
+import mongoose, { Schema, Model, Document } from "mongoose";
 import { IUser } from "../interfaces/IUser";
 
 const userSchema: Schema = new Schema(
   {
-    _id: {
-      type: Types.ObjectId,
-      required: true,
-      auto: true,
-    },
     name: {
       type: String,
       required: true,
@@ -30,13 +25,6 @@ const userSchema: Schema = new Schema(
   },
   {
     timestamps: true,
-    toJSON: {
-      transform: (_, ret) => {
-        ret.id = ret._id.toString();
-        delete ret._id;
-        delete ret.__v;
-      },
-    },
   }
 );
 
