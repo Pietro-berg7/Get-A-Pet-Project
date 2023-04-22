@@ -7,15 +7,11 @@ const port = config.get("port");
 interface MongooseOptions extends ConnectOptions {
   useNewUrlParser: boolean;
   useUnifiedTopology: boolean;
-  useFindAndModify: boolean;
-  useCreateIndex: boolean;
 }
 
 mongoose.connect(db, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true,
 } as MongooseOptions);
 
 const connection = mongoose.connection;

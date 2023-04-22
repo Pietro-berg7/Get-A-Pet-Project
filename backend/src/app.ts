@@ -16,6 +16,13 @@ app.use(cors({ credentials: true, origin: "https://localhost:3000" }));
 // Public folder for images
 app.use(express.static("public"));
 
+// Connect to MongoDB
+connection.on("connected", () => {});
+
+connection.on("error", (err) => {
+  process.exit(1);
+});
+
 // Routes
 app.use("/users", UserRoutes);
 
