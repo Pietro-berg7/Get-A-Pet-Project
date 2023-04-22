@@ -33,7 +33,7 @@ export const validateRegister = (
   next();
 };
 
-export const validateLogin = (
+export const validateLogin = async (
   req: Request,
   res: Response,
   next: NextFunction

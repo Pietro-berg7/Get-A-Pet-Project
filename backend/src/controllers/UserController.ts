@@ -51,10 +51,20 @@ export class UserController {
     const { email, password } = req.body;
 
     // check if user exists
-    const user = (await User.findOne({ email: email })) as IUser;
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      return res
+        .status(422)
+        .json({ message: "Não há usuário cadastrado com este e-mail!" });
+    }
 
     // check if password match with db password
     const checkPassword = await bcrypt.compare(password, user.password);
+
+    if (!checkPassword) {
+      return res.status(422).json({ message: "Senha inválida!" });
+    }
 
     await createUserToken(user, req, res);
   }
