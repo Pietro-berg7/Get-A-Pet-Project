@@ -1,0 +1,100 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Get A Pet API",
+    "description": "API para registro de usuários e de animais para adoção.",
+    "contact": {
+      "email": "pietrovb25@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "API de teste"
+    }
+  ],
+  "paths": {
+    "/users/register": {
+      "post": {
+        "summary": "Cadastro de usuário",
+        "description": "Esta rota será responsável por cadastrar um novo usuário no sistema",
+        "tags": ["User"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "name": "Bob",
+                    "email": "bob@test.com",
+                    "phone": "99887766",
+                    "password": "password123",
+                    "confirmpassword": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Desculpe, ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde"
+          },
+          "422": {
+            "description": "Por favor, utilize outro e-mail!"
+          },
+          "200": {
+            "description": "Você está autenticado!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "users/login": {},
+    "users/checkuser": {},
+    "users/:id": {},
+    "users/edit/:id": {}
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

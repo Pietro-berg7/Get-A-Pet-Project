@@ -8,7 +8,7 @@ interface User {
 
 export const createUserToken = async (
   user: User,
-  req: Request,
+  _req: Request,
   res: Response
 ): Promise<void> => {
   // create a token

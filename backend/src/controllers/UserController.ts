@@ -28,6 +28,14 @@ export class UserController {
   static async register(req: RegisterRequest, res: Response) {
     const { name, email, phone, password } = req.body;
 
+    // check if user exists
+    const userExists = await User.findOne({ email: email });
+
+    if (userExists) {
+      res.status(422).json({ message: "Por favor, utilize outro e-mail!" });
+      return;
+    }
+
     // create a password
     const salt = await bcrypt.genSalt(12);
     const passwordHash = await bcrypt.hash(password, salt);
@@ -45,7 +53,10 @@ export class UserController {
 
       await createUserToken(newUser, req, res);
     } catch (error) {
-      return res.status(500).json({ message: error });
+      return res.status(500).json({
+        message:
+          "Desculpe, ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde!",
+      });
     }
   }
 
