@@ -5,6 +5,7 @@ import { User } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { validateRegister, validateLogin } from "../middlewares/validations";
+import { verifyToken } from "../middlewares/verifyToken";
 import { IUser } from "../interfaces/IUser";
 
 interface RegisterRequest extends Request {
@@ -98,8 +99,13 @@ export class UserController {
 
     return res.status(200).json({ user });
   }
+
+  static async editUser(req: Request, res: Response) {
+    return res.status(200).json({ message: "Update funcionou!" });
+  }
 }
 
 // middlewares para validações
 export const validateRegisterMiddleware = [validateRegister];
 export const validateLoginMiddleware = [validateLogin];
+export const verifyTokenMiddleware = [verifyToken];
