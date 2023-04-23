@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { createUserToken } from "../helpers/createUserToken";
+import { getToken } from "../helpers/getToken";
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { validateRegister, validateLogin } from "../middlewares/validations";
 import { IUser } from "../interfaces/IUser";
 
@@ -59,7 +61,7 @@ export class UserController {
     }
 
     // check if password match with db password
-    const checkPassword = await bcrypt.compare(password, user.password);
+    const checkPassword = await bcrypt.compare(password, user.password ?? "");
 
     if (!checkPassword) {
       return res.status(422).json({ message: "Senha inválida!" });
@@ -69,11 +71,20 @@ export class UserController {
   }
 
   static async checkUser(req: Request, res: Response) {
-    let currentUser;
-
-    console.log(req.headers.authorization);
+    let currentUser: IUser | null = null;
 
     if (req.headers.authorization) {
+      const token = getToken(req);
+
+      if (token) {
+        const decoded = jwt.verify(token, "nossosecret") as JwtPayload;
+
+        currentUser = await User.findById(decoded.id);
+
+        if (currentUser !== null) {
+          currentUser.password = undefined;
+        }
+      }
     } else {
       currentUser = null;
     }
