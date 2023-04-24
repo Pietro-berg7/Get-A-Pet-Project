@@ -44,7 +44,25 @@
           "500": {
             "description": "Desculpe, ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde"
           },
-          "422": {
+          "422_1": {
+            "description": "O nome é obrigatório!"
+          },
+          "422_2": {
+            "description": "O e-mail é obrigatório!"
+          },
+          "422_3": {
+            "description": "O telefone é obrigatório!"
+          },
+          "422_4": {
+            "description": "A senha é obrigatória!"
+          },
+          "422_5": {
+            "description": "A confirmação de senha é obrigatória!"
+          },
+          "422_6": {
+            "description": "A senha e a confirmação de senha precisam ser iguais!"
+          },
+          "422_7": {
             "description": "Por favor, utilize outro e-mail!"
           },
           "200": {
@@ -61,29 +79,68 @@
         }
       }
     },
-    "users/login": {},
-    "users/checkuser": {},
-    "users/:id": {},
-    "users/edit/:id": {}
+    "/users/login": {
+      "post": {
+        "summary": "Fazer login",
+        "description": "Esta rota será responsável por fazer login no sistema",
+        "tags": ["User"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "email": "bob@test.com",
+                    "password": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "422_1": {
+            "description": "O e-mail é obrigatório!"
+          },
+          "422_2": {
+            "description": "A senha é obrigatória!"
+          },
+          "422_3": {
+            "description": "Não há usuário cadastrado com este e-mail!"
+          },
+          "200": {
+            "description": "Você está autenticado!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/checkuser": {},
+    "/users/:id": {},
+    "/users/edit/:id": {}
   },
   "components": {
     "schemas": {
       "User": {
         "type": "object",
         "properties": {
-          "name": {
+          "message": {
             "type": "string"
           },
-          "email": {
+          "token": {
             "type": "string"
           },
-          "password": {
-            "type": "string"
-          },
-          "image": {
-            "type": "string"
-          },
-          "phone": {
+          "userId": {
             "type": "string"
           }
         }
