@@ -41,9 +41,6 @@
           }
         },
         "responses": {
-          "500": {
-            "description": "Desculpe, ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde"
-          },
           "422_1": {
             "description": "O nome é obrigatório!"
           },

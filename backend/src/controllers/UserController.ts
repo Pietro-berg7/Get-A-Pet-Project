@@ -54,10 +54,7 @@ export class UserController {
 
       await createUserToken(newUser, req, res);
     } catch (error) {
-      return res.status(500).json({
-        message:
-          "Desculpe, ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde!",
-      });
+      return res.status(500).json({ message: error });
     }
   }
 
@@ -122,18 +119,43 @@ export class UserController {
     const token = getToken(req);
     const user = await getUserByToken(token as string);
 
-    const userExists = await User.findOne({ email: email });
-    if (user.email !== email && userExists) {
-      return res.status(404).json({ message: "Por favor, utilize outro e-mail!" });
-    }
-
-    user.email = email;
-
-    let image = "";
-
     if (!user) {
       return res.status(404).json({ message: "Usuário não encontrado!" });
     }
+
+    const userExists = await User.findOne({ email: email });
+    if (user.email !== email && userExists) {
+      return res
+        .status(404)
+        .json({ message: "Por favor, utilize outro e-mail!" });
+    }
+
+    user.name = name;
+    user.email = email;
+    user.phone = phone;
+
+    if (password != null) {
+      //creating password
+      const salt = await bcrypt.genSalt(12);
+      const passwordHash = await bcrypt.hash(password, salt);
+
+      user.password = passwordHash;
+    }
+
+    try {
+      // returns user updated data
+      await User.findOneAndUpdate(
+        {_id: user._id},
+        {$set: user},
+        {new:true}
+      )
+
+      res.status(200).json({message: "Usuário atualizado com sucesso!"})
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
+
+    let image = "";
   }
 }
 
