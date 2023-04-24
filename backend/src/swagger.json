@@ -148,7 +148,7 @@
       }
     },
     "/users/edit/{id}": {
-      "get": {
+      "patch": {
         "summary": "Editar usuário",
         "description": "Este endpoint é utilizado que o usuário altere seus dados",
         "tags": ["User"],
@@ -157,14 +157,65 @@
           {
             "name": "id",
             "in": "path",
-            "description": "ID do usuário",
+            "description": "ID do usuário a ser editado",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "Arquivo JPG/PNG a ser enviado",
+            "required": true,
+            "type": "file"
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "name": "Bob Update Test",
+                    "email": "bobtest@test.com",
+                    "phone": "9988776655",
+                    "password": "password321",
+                    "confirmpassword": "password321",
+                    "image": {
+                      "value": "/D:/Users/pietr/Downloads/media_17e9d2503c0ecdea37e6d9bc6e2beb26adb470617.png",
+                      "options": {
+                        "contentType": "image/png"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
+          "422_1": {
+            "description": "O nome é obrigatório!"
+          },
+          "422_2": {
+            "description": "O e-mail é obrigatório!"
+          },
+          "422_3": {
+            "description": "O telefone é obrigatório!"
+          },
+          "422_4": {
+            "description": "A senha e a confirmação de senha precisam ser iguais!"
+          },
+          "404_1": {
+            "description": "Usuário não encontrado!"
+          },
+          "404_2": {
+            "description": "Por favor, utilize outro e-mail!"
+          },
           "200": {
-            "description": "Update funcionou!"
+            "description": "Usuário atualizado com sucesso!"
           }
         }
       }
