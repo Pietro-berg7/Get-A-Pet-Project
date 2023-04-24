@@ -4,7 +4,6 @@ import {
   UserController,
   validateLoginMiddleware,
   validateRegisterMiddleware,
-  validateUpdateMiddleware,
   verifyTokenMiddleware,
 } from "../controllers/UserController";
 
@@ -18,7 +17,6 @@ router.get("/checkuser", UserController.checkUser);
 router.get("/:id", UserController.getUserById);
 router.patch(
   "/edit/:id",
-  validateUpdateMiddleware,
   verifyTokenMiddleware,
   imageUpload.single("image"),
   UserController.editUser

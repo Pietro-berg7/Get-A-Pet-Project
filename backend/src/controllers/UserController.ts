@@ -8,7 +8,6 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import {
   validateRegister,
   validateLogin,
-  validateUpdate,
 } from "../middlewares/validations";
 import { verifyToken } from "../middlewares/verifyToken";
 import { IUser } from "../interfaces/IUser";
@@ -124,7 +123,22 @@ export class UserController {
       return res.status(404).json({ message: "Usuário não encontrado!" });
     }
 
-    const { name, email, phone, password } = req.body;
+    const { name, email, phone, password, confirmpassword } = req.body;
+
+    if (!name) {
+      return res.status(422).json({ message: "O nome é obrigatório!" });
+    }
+    if (!email) {
+      return res.status(422).json({ message: "O e-mail é obrigatório!" });
+    }
+    if (!phone) {
+      return res.status(422).json({ message: "O telefone é obrigatório!" });
+    }
+    if (password !== confirmpassword) {
+      return res.status(422).json({
+        message: "A senha e a confirmação de senha precisam ser iguais!",
+      });
+    }
 
     if (req.file) {
       user.image = req.file.filename;
@@ -170,4 +184,3 @@ export class UserController {
 export const validateRegisterMiddleware = [validateRegister];
 export const validateLoginMiddleware = [validateLogin];
 export const verifyTokenMiddleware = [verifyToken];
-export const validateUpdateMiddleware = [validateUpdate];
