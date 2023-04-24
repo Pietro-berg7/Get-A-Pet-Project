@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { createUserToken } from "../helpers/createUserToken";
 import { getToken } from "../helpers/getToken";
+import { getUserByToken } from "../helpers/getUserByToken";
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
@@ -114,7 +115,25 @@ export class UserController {
   }
 
   static async editUser(req: Request, res: Response) {
-    return res.status(200).json({ message: "Update funcionou!" });
+    const { id } = req.params;
+    const { name, email, phone, password } = req.body;
+
+    // check if user exists
+    const token = getToken(req);
+    const user = await getUserByToken(token as string);
+
+    const userExists = await User.findOne({ email: email });
+    if (user.email !== email && userExists) {
+      return res.status(404).json({ message: "Por favor, utilize outro e-mail!" });
+    }
+
+    user.email = email;
+
+    let image = "";
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuário não encontrado!" });
+    }
   }
 }
 

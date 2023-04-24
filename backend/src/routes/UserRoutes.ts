@@ -13,6 +13,11 @@ router.post("/register", validateRegisterMiddleware, UserController.register);
 router.post("/login", validateLoginMiddleware, UserController.login);
 router.get("/checkuser", UserController.checkUser);
 router.get("/:id", UserController.getUserById);
-router.patch("/edit/:id", verifyTokenMiddleware, UserController.editUser);
+router.patch(
+  "/edit/:id",
+  validateRegisterMiddleware,
+  verifyTokenMiddleware,
+  UserController.editUser
+);
 
 export default router;
