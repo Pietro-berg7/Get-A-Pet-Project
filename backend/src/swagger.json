@@ -125,9 +125,53 @@
         }
       }
     },
-    "/users/checkuser": {},
-    "/users/:id": {},
-    "/users/edit/:id": {}
+    "/users/{id}": {
+      "get": {
+        "summary": "Buscar usuário por ID",
+        "description": "Este endpoint é utilizado para buscar um usuário pelo seu ID",
+        "tags": ["User"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário a ser buscado",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Usuário não encontrado!"
+          },
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/users/edit/{id}": {
+      "get": {
+        "summary": "Editar usuário",
+        "description": "Este endpoint é utilizado que o usuário altere seus dados",
+        "tags": ["User"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update funcionou!"
+          }
+        }
+      }
+    }
   },
   "components": {
     "schemas": {

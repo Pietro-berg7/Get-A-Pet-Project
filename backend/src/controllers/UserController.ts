@@ -88,6 +88,8 @@ export class UserController {
     if (req.headers.authorization) {
       const token = getToken(req);
 
+      console.log(req.headers.authorization);
+
       if (token) {
         const decoded = jwt.verify(token, "nossosecret") as JwtPayload;
 
