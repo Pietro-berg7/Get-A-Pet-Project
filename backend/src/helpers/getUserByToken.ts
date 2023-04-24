@@ -15,4 +15,4 @@ export const getUserByToken = async (token: string) => {
   const user = await User.findOne({ _id: userId });
 
   return user;
-}
+};

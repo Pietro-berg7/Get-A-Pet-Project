@@ -5,7 +5,11 @@ import { getUserByToken } from "../helpers/getUserByToken";
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { validateRegister, validateLogin } from "../middlewares/validations";
+import {
+  validateRegister,
+  validateLogin,
+  validateUpdate,
+} from "../middlewares/validations";
 import { verifyToken } from "../middlewares/verifyToken";
 import { IUser } from "../interfaces/IUser";
 
@@ -112,15 +116,18 @@ export class UserController {
   }
 
   static async editUser(req: Request, res: Response) {
-    const { id } = req.params;
-    const { name, email, phone, password } = req.body;
-
     // check if user exists
     const token = getToken(req);
     const user = await getUserByToken(token as string);
 
     if (!user) {
       return res.status(404).json({ message: "Usuário não encontrado!" });
+    }
+
+    const { name, email, phone, password } = req.body;
+
+    if (req.file) {
+      user.image = req.file.filename;
     }
 
     const userExists = await User.findOne({ email: email });
@@ -135,9 +142,11 @@ export class UserController {
     user.phone = phone;
 
     if (password != null) {
-      //creating password
+      // creating password
       const salt = await bcrypt.genSalt(12);
-      const passwordHash = await bcrypt.hash(password, salt);
+      const reqPassword = req.body.password;
+
+      const passwordHash = await bcrypt.hash(reqPassword, salt);
 
       user.password = passwordHash;
     }
@@ -145,17 +154,15 @@ export class UserController {
     try {
       // returns user updated data
       await User.findOneAndUpdate(
-        {_id: user._id},
-        {$set: user},
-        {new:true}
-      )
+        { _id: user._id },
+        { $set: user },
+        { new: true }
+      );
 
-      res.status(200).json({message: "Usuário atualizado com sucesso!"})
+      res.status(200).json({ message: "Usuário atualizado com sucesso!" });
     } catch (error) {
       res.status(500).json({ message: error });
     }
-
-    let image = "";
   }
 }
 
@@ -163,3 +170,4 @@ export class UserController {
 export const validateRegisterMiddleware = [validateRegister];
 export const validateLoginMiddleware = [validateLogin];
 export const verifyTokenMiddleware = [verifyToken];
+export const validateUpdateMiddleware = [validateUpdate];

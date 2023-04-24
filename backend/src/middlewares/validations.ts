@@ -49,3 +49,28 @@ export const validateLogin = async (
 
   next();
 };
+
+export const validateUpdate = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { name, email, phone, password, confirmpassword } = req.body;
+
+  if (!name) {
+    return res.status(422).json({ message: "O nome é obrigatório!" });
+  }
+  if (!email) {
+    return res.status(422).json({ message: "O e-mail é obrigatório!" });
+  }
+  if (!phone) {
+    return res.status(422).json({ message: "O telefone é obrigatório!" });
+  }
+  if (password !== confirmpassword) {
+    return res.status(422).json({
+      message: "A senha e a confirmação de senha precisam ser iguais!",
+    });
+  }
+
+  next();
+};
