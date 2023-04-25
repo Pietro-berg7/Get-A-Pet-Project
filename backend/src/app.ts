@@ -6,6 +6,7 @@ import swaggerDocs from "./swagger.json";
 
 // Import Routes
 import UserRoutes from "./routes/UserRoutes";
+import PetRoutes from "./routes/PetRoutes";
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Routes
 app.use("/users", UserRoutes);
+app.use("/pets", PetRoutes);
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");

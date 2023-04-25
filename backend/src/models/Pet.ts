@@ -39,7 +39,7 @@ const petSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-export const User: Model<IPet & Document> = mongoose.model<IPet & Document>(
+export const Pet: Model<IPet & Document> = mongoose.model<IPet & Document>(
   "Pet",
   petSchema
 );
