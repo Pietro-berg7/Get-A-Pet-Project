@@ -8,8 +8,8 @@ export interface IPet extends Document {
   color: string;
   images: string[];
   available: boolean;
-  user: Types.ObjectId | (IUser & Document);
-  adopter: Types.ObjectId | (IUser & Document);
+  user: IUser["_id"] | IUser;
+  adopter: IUser["_id"] | IUser;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -28,13 +28,25 @@ const petSchema: Schema = new Schema(
       default: true,
     },
     user: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      _id: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+      name: {
+        type: String,
+        required: true,
+      },
+      image: {
+        type: String,
+        required: true,
+      },
+      phone: {
+        type: String,
+        required: true,
+      },
     },
-    adopter: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
+    adopter: Object,
   },
   { timestamps: true }
 );

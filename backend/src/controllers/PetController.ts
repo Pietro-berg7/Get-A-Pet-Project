@@ -6,58 +6,63 @@ import { constants } from "fs/promises";
 // helpers
 import { getToken } from "../helpers/getToken";
 import { getUserByToken } from "../helpers/getUserByToken";
+import { IPet } from "../interfaces/IPet";
+import { validatePetRegister } from "../middlewares/validations";
 
-// interface RegisterRequest extends Request {
-//   body: {
-//     name: string;
-//     email: string;
-//     phone: string;
-//     password: string;
-//   };
-// }
+interface RegisterRequest extends Request {
+  body: {
+    name: string;
+    age: number;
+    weight: number;
+    color: string;
+  };
+}
 
 export class PetController {
-  static async create(req: Request, res: Response) {
+  static async create(req: RegisterRequest, res: Response) {
     const { name, age, weight, color } = req.body;
 
     const available = true;
 
-    // validations
-    if (!name) {
-      res.status(422).json({ message: "O nome é obrigatório!" });
-      return;
-    }
-    if (!age) {
-      res.status(422).json({ message: "A idade é obrigatória!" });
-      return;
-    }
-    if (!weight) {
-      res.status(422).json({ message: "O peso é obrigatório!" });
-      return;
-    }
-    if (!color) {
-      res.status(422).json({ message: "A cor é obrigatória!" });
-      return;
-    }
+    try {
+      // get pet owner
+      const token = getToken(req);
+      const user: IUser | null = await getUserByToken(token as string);
 
-    // get pet owner
-    const token = getToken(req);
-    const user = getUserByToken(token as string);
+      if (!user) {
+        res.status(401).json({ message: "Usuário não encontrado!" });
+        return;
+      }
 
-    // create a pet
-    const pet = new Pet({
-      name: name,
-      age: age,
-      weight: weight,
-      color: color,
-      available: available,
-      images: [],
-      user: {
-        _id: user._id,
-        name: user.name,
-        image: user.image,
-        phone: user.phone,
-      },
-    });
+      console.log(user);
+
+      // create a pet
+      const pet: IPet = new Pet({
+        name,
+        age,
+        weight,
+        color,
+        available,
+        images: [],
+        user: {
+          _id: user._id,
+          name: user.name,
+          image: user.image,
+          phone: user.phone,
+        },
+      });
+
+      const newPet = await pet.save();
+
+      res.status(201).json({
+        message: "Pet cadastrado com sucesso!",
+        newPet: newPet,
+      });
+    } catch (error) {
+      res.status(500).json({ message: error });
+    }
   }
 }
+
+// middlewares para validações
+export const validatePetRegisterMiddleware = [validatePetRegister];
