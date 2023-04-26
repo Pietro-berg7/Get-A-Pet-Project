@@ -7,7 +7,6 @@ import { constants } from "fs/promises";
 import { getToken } from "../helpers/getToken";
 import { getUserByToken } from "../helpers/getUserByToken";
 import { IPet } from "../interfaces/IPet";
-import { validatePetRegister } from "../middlewares/validations";
 
 interface RegisterRequest extends Request {
   body: {
@@ -21,6 +20,23 @@ interface RegisterRequest extends Request {
 export class PetController {
   static async create(req: RegisterRequest, res: Response) {
     const { name, age, weight, color } = req.body;
+    const images = req.files;
+
+    if (!name) {
+      return res.status(422).json({ message: "O nome é obrigatório!" });
+    }
+    if (!age) {
+      return res.status(422).json({ message: "A idade é obrigatória!" });
+    }
+    if (!weight) {
+      return res.status(422).json({ message: "O peso é obrigatório!" });
+    }
+    if (!color) {
+      return res.status(422).json({ message: "A cor é obrigatória!" });
+    }
+    if (!Array.isArray(images) || images.length === 0) {
+      return res.status(422).json({ message: "A imagem é obrigatória!" });
+    }
 
     const available = true;
 
@@ -33,8 +49,6 @@ export class PetController {
         res.status(401).json({ message: "Usuário não encontrado!" });
         return;
       }
-
-      console.log(user);
 
       // create a pet
       const pet: IPet = new Pet({
@@ -52,6 +66,10 @@ export class PetController {
         },
       });
 
+      images.map((image) => {
+        pet.images.push(image.filename);
+      });
+
       const newPet = await pet.save();
 
       res.status(201).json({
@@ -63,6 +81,3 @@ export class PetController {
     }
   }
 }
-
-// middlewares para validações
-export const validatePetRegisterMiddleware = [validatePetRegister];

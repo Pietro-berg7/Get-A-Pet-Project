@@ -1,18 +1,16 @@
 import { Router } from "express";
 
-import {
-  PetController,
-  validatePetRegisterMiddleware,
-} from "../controllers/PetController";
+import { PetController } from "../controllers/PetController";
 
 import { verifyToken } from "../middlewares/verifyToken";
+import { imageUpload } from "../helpers/imageUpload";
 
 const router = Router();
 
 router.post(
   "/create",
-  validatePetRegisterMiddleware,
   verifyToken,
+  imageUpload.array("images"),
   PetController.create
 );
 
