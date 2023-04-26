@@ -105,4 +105,21 @@ export class PetController {
       pets,
     });
   }
+
+  static async getAllUserAdoptions(req: RegisterRequest, res: Response) {
+    // get user from token
+    const token = getToken(req);
+    const user: IUser | null = await getUserByToken(token as string);
+
+    if (!user) {
+      res.status(401).json({ message: "Usuário não encontrado!" });
+      return;
+    }
+
+    const pets = await Pet.find({ "adopter._id": user._id }).sort("-createdAt");
+
+    res.status(200).json({
+      pets,
+    });
+  }
 }
