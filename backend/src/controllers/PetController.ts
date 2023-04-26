@@ -7,6 +7,7 @@ import { constants } from "fs/promises";
 import { getToken } from "../helpers/getToken";
 import { getUserByToken } from "../helpers/getUserByToken";
 import { IPet } from "../interfaces/IPet";
+import { isValidObjectId } from "mongoose";
 
 interface RegisterRequest extends Request {
   body: {
@@ -120,6 +121,25 @@ export class PetController {
 
     res.status(200).json({
       pets,
+    });
+  }
+
+  static async getPetById(req: Request, res: Response) {
+    const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      return res.status(422).json({ message: "ID inválido!" });
+    }
+
+    // check if pet exists
+    const pet = await Pet.findOne({ _id: id });
+
+    if (!pet) {
+      return res.status(404).json({ message: "Pet não encontrado!" });
+    }
+
+    return res.status(200).json({
+      pet: pet,
     });
   }
 }
