@@ -80,4 +80,12 @@ export class PetController {
       res.status(500).json({ message: error });
     }
   }
+
+  static async getAll(_req: RegisterRequest, res: Response) {
+    const pets = await Pet.find().sort("-createdAt");
+
+    res.status(200).json({
+      pets: pets,
+    });
+  }
 }
