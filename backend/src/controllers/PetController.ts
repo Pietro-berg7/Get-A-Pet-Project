@@ -127,6 +127,7 @@ export class PetController {
   static async getPetById(req: Request, res: Response) {
     const { id } = req.params;
 
+    // check if id is valid
     if (!isValidObjectId(id)) {
       return res.status(422).json({ message: "ID inválido!" });
     }
@@ -141,5 +142,46 @@ export class PetController {
     return res.status(200).json({
       pet: pet,
     });
+  }
+
+  static async removePetById(req: Request, res: Response) {
+    const { id } = req.params;
+
+    // check if id is valid
+    if (!isValidObjectId(id)) {
+      return res.status(422).json({ message: "ID inválido!" });
+    }
+
+    // check if pet exists
+    const pet = await Pet.findOne({ _id: id });
+
+    if (!pet) {
+      return res.status(404).json({ message: "Pet não encontrado!" });
+    }
+
+    // get user from token
+    const token = getToken(req);
+    const user: IUser | null = await getUserByToken(token as string);
+
+    if (!user) {
+      res.status(401).json({ message: "Usuário não encontrado!" });
+      return;
+    }
+
+    console.log(user);
+
+    if (typeof pet.user !== "string") {
+      // check if logged in user registered the pet
+      if (pet.user._id.toString() !== user._id.toString()) {
+        res.status(422).json({
+          message:
+            "Houve um problema ao processar sua solicitação, tente novamente mais tarde!",
+        });
+      }
+    }
+
+    await Pet.findByIdAndRemove(id);
+
+    return res.status(200).json({ message: "Pet removido com sucesso!" });
   }
 }
