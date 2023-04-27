@@ -13,3 +13,11 @@ export interface IPet extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IUpdatePet {
+  name: string;
+  age: number;
+  weight: number;
+  color: string;
+  images: string[];
+}

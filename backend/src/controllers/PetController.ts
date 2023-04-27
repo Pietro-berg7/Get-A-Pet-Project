@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
 import { Pet } from "../models/Pet";
 import { IUser } from "../interfaces/IUser";
-import { constants } from "fs/promises";
+import { IPet, IUpdatePet } from "../interfaces/IPet";
+import { isValidObjectId } from "mongoose";
 
 // helpers
 import { getToken } from "../helpers/getToken";
 import { getUserByToken } from "../helpers/getUserByToken";
-import { IPet } from "../interfaces/IPet";
-import { isValidObjectId } from "mongoose";
 
 interface RegisterRequest extends Request {
   body: {
@@ -15,6 +14,7 @@ interface RegisterRequest extends Request {
     age: number;
     weight: number;
     color: string;
+    available: boolean;
   };
 }
 
@@ -124,7 +124,7 @@ export class PetController {
     });
   }
 
-  static async getPetById(req: Request, res: Response) {
+  static async getPetById(req: RegisterRequest, res: Response) {
     const { id } = req.params;
 
     // check if id is valid
@@ -144,7 +144,7 @@ export class PetController {
     });
   }
 
-  static async removePetById(req: Request, res: Response) {
+  static async removePetById(req: RegisterRequest, res: Response) {
     const { id } = req.params;
 
     // check if id is valid
@@ -164,16 +164,13 @@ export class PetController {
     const user: IUser | null = await getUserByToken(token as string);
 
     if (!user) {
-      res.status(401).json({ message: "Usuário não encontrado!" });
-      return;
+      return res.status(401).json({ message: "Usuário não encontrado!" });
     }
-
-    console.log(user);
 
     if (typeof pet.user !== "string") {
       // check if logged in user registered the pet
       if (pet.user._id.toString() !== user._id.toString()) {
-        res.status(422).json({
+        return res.status(422).json({
           message:
             "Houve um problema ao processar sua solicitação, tente novamente mais tarde!",
         });
@@ -183,5 +180,79 @@ export class PetController {
     await Pet.findByIdAndRemove(id);
 
     return res.status(200).json({ message: "Pet removido com sucesso!" });
+  }
+
+  static async updatePet(req: RegisterRequest, res: Response) {
+    const { id } = req.params;
+    const { name, age, weight, color, available } = req.body;
+    const images = req.files;
+
+    // check if pet exists
+    const pet = await Pet.findOne({ _id: id });
+
+    if (!pet) {
+      return res.status(404).json({ message: "Pet não encontrado!" });
+    }
+
+    // get user from token
+    const token = getToken(req);
+    const user: IUser | null = await getUserByToken(token as string);
+
+    if (!user) {
+      return res.status(401).json({ message: "Usuário não encontrado!" });
+    }
+
+    if (typeof pet.user !== "string") {
+      // check if logged in user registered the pet
+      if (pet.user._id.toString() !== user._id.toString()) {
+        return res.status(422).json({
+          message:
+            "Houve um problema ao processar sua solicitação, tente novamente mais tarde!",
+        });
+      }
+    }
+
+    const updatedData: IUpdatePet = {
+      name,
+      age,
+      weight,
+      color,
+      images: [],
+    };
+
+    // validations
+    if (!name) {
+      return res.status(422).json({ message: "O nome é obrigatório!" });
+    } else {
+      updatedData.name = name;
+    }
+    if (!age) {
+      return res.status(422).json({ message: "A idade é obrigatória!" });
+    } else {
+      updatedData.age = age;
+    }
+    if (!weight) {
+      return res.status(422).json({ message: "O peso é obrigatório!" });
+    } else {
+      updatedData.weight = weight;
+    }
+    if (!color) {
+      return res.status(422).json({ message: "A cor é obrigatória!" });
+    } else {
+      updatedData.color = color;
+    }
+    if (!Array.isArray(images) || images.length === 0) {
+      return res.status(422).json({ message: "A imagem é obrigatória!" });
+    } else {
+      updatedData.images = [];
+
+      images.map((image) => {
+        updatedData.images.push(image.filename);
+      });
+    }
+
+    await Pet.findByIdAndUpdate(id, updatedData);
+
+    res.status(200).json({ message: "Pet atualizado com sucesso!" });
   }
 }
