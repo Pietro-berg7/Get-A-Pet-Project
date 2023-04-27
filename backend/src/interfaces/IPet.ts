@@ -1,4 +1,4 @@
-import { Document, Types } from "mongoose";
+import { Document, ObjectId, Types } from "mongoose";
 import { IUser } from "./IUser";
 
 export interface IPet extends Document {
@@ -8,8 +8,17 @@ export interface IPet extends Document {
   color: string;
   images: string[];
   available: boolean;
-  user: IUser["_id"] | IUser;
-  adopter: IUser["_id"] | IUser;
+  user: {
+    _id: string;
+    name: string;
+    image: string | undefined;
+    phone: string;
+  };
+  adopter: {
+    _id: string;
+    name: string;
+    image: string | undefined;
+  };
   createdAt: Date;
   updatedAt: Date;
 }

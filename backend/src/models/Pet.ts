@@ -46,7 +46,21 @@ const petSchema: Schema = new Schema(
         required: true,
       },
     },
-    adopter: Object,
+    adopter: {
+      _id: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+      name: {
+        type: String,
+        required: true,
+      },
+      image: {
+        type: String,
+        required: true,
+      },
+    },
   },
   { timestamps: true }
 );
