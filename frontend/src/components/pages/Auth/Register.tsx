@@ -1,5 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Input from "../../form/Input";
+
+import "../../form/Form.css";
 
 const Register: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -7,7 +10,7 @@ const Register: React.FC = () => {
   };
 
   return (
-    <section>
+    <section className="form_container">
       <h1>Registrar</h1>
       <form>
         <Input
@@ -47,6 +50,9 @@ const Register: React.FC = () => {
         />
         <input type="submit" value="Cadastrar" />
       </form>
+      <p>
+        Já tem conta? <Link to="/login">Clique aqui!</Link>
+      </p>
     </section>
   );
 };
