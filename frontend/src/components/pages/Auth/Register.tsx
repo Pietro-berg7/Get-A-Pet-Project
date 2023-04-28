@@ -1,18 +1,26 @@
-import React from "react";
+import React, { SyntheticEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import Input from "../../form/Input";
 
 import "../../form/Form.css";
 
 const Register: React.FC = () => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
+  const [user, setUser] = useState({})
+
+  const handleChange = (e: SyntheticEvent<HTMLInputElement>) => {
+    setUser({ ...user, [e.currentTarget.name]: e.currentTarget.value });
+  };
+  
+  const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // enviar o usuário para o banco
+    console.log(user);
   };
 
   return (
     <section className="form_container">
       <h1>Registrar</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <Input
           text="Nome"
           type="text"
