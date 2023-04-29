@@ -1,14 +1,23 @@
 import { createContext } from "react";
 
 import { useAuth } from "../hooks/useAuth";
-import IUser from "../interfaces/IUser";
+import { IUser } from "../interfaces/IUser";
 
-const Context = createContext<IUser>({
-  user: {
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
+interface IUserContext {
+  register: (user: IUser) => Promise<void>;
+}
+
+const emptyUser: IUser = {
+  name: "",
+  email: "",
+  phone: "",
+  password: "",
+  confirmpassword: "",
+};
+
+const Context = createContext<IUserContext>({
+  register: async () => {
+    emptyUser;
   },
 });
 

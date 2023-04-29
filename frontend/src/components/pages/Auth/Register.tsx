@@ -1,20 +1,32 @@
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import Input from "../../form/Input";
 
 import "../../form/Form.css";
 
+// context
+import { Context } from "../../../context/UserContext";
+import { IUser } from "../../../interfaces/IUser";
+
 const Register: React.FC = () => {
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState<IUser>({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmpassword: "",
+  });
+  const { register } = useContext(Context);
 
   const handleChange = (e: SyntheticEvent<HTMLInputElement>) => {
     setUser({ ...user, [e.currentTarget.name]: e.currentTarget.value });
   };
-  
+
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // enviar o usuário para o banco
     console.log(user);
+
+    register(user);
   };
 
   return (
