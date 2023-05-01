@@ -24,7 +24,6 @@ const Register: React.FC = () => {
 
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(user);
 
     register(user);
   };
