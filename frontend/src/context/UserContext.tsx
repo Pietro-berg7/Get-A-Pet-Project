@@ -4,6 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import { IUser } from "../interfaces/IUser";
 
 interface IUserContext {
+  authenticated: boolean;
   register: (user: IUser) => Promise<void>;
 }
 
@@ -19,6 +20,7 @@ const Context = createContext<IUserContext>({
   register: async () => {
     emptyUser;
   },
+  authenticated: false,
 });
 
 interface Props {
@@ -26,9 +28,13 @@ interface Props {
 }
 
 function UserProvider({ children }: Props) {
-  const { register } = useAuth();
+  const { register, authenticated } = useAuth();
 
-  return <Context.Provider value={{ register }}>{children}</Context.Provider>;
+  return (
+    <Context.Provider value={{ authenticated, register }}>
+      {children}
+    </Context.Provider>
+  );
 }
 
 export { Context, UserProvider };
