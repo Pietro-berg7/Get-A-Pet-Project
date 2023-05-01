@@ -43,6 +43,7 @@ export function useAuth(): IUseAuth {
         });
 
       await authUser(data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       msgText = error.response.data.message;
       msgType = "error";
