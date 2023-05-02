@@ -9,6 +9,7 @@ import useFlashMessage from "./useFlashMessage";
 interface IUseAuth {
   authenticated: boolean;
   register: (user: IUser) => Promise<void>;
+  logout: () => void;
 }
 
 interface authUserData {
@@ -60,5 +61,17 @@ export function useAuth(): IUseAuth {
     navigate("/");
   }
 
-  return { authenticated, register };
+  function logout(): void {
+    const msgText = "Logout realizado com sucesso!";
+    const msgType = "success";
+
+    setAuthenticated(false);
+    localStorage.removeItem("token");
+    delete api.defaults.headers.Authorization;
+    navigate("/");
+
+    setFlashMessage(msgText, msgType);
+  }
+
+  return { authenticated, register, logout };
 }

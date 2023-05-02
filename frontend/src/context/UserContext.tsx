@@ -6,6 +6,7 @@ import { IUser } from "../interfaces/IUser";
 interface IUserContext {
   authenticated: boolean;
   register: (user: IUser) => Promise<void>;
+  logout?: () => void;
 }
 
 const emptyUser: IUser = {
@@ -28,10 +29,10 @@ interface Props {
 }
 
 function UserProvider({ children }: Props) {
-  const { register, authenticated } = useAuth();
+  const { register, authenticated, logout } = useAuth();
 
   return (
-    <Context.Provider value={{ authenticated, register }}>
+    <Context.Provider value={{ authenticated, register, logout }}>
       {children}
     </Context.Provider>
   );
