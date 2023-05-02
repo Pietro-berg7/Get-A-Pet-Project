@@ -2,10 +2,12 @@ import { createContext } from "react";
 
 import { useAuth } from "../hooks/useAuth";
 import { IUser } from "../interfaces/IUser";
+import { ILogin } from "../interfaces/ILogin";
 
 interface IUserContext {
   authenticated: boolean;
   register: (user: IUser) => Promise<void>;
+  login: (user: ILogin) => Promise<void>;
   logout?: () => void;
 }
 
@@ -21,6 +23,10 @@ const Context = createContext<IUserContext>({
   register: async () => {
     emptyUser;
   },
+  login: async () => {
+    ("");
+    ("");
+  },
   authenticated: false,
 });
 
@@ -29,10 +35,10 @@ interface Props {
 }
 
 function UserProvider({ children }: Props) {
-  const { register, authenticated, logout } = useAuth();
+  const { register, authenticated, login, logout } = useAuth();
 
   return (
-    <Context.Provider value={{ authenticated, register, logout }}>
+    <Context.Provider value={{ authenticated, register, login, logout }}>
       {children}
     </Context.Provider>
   );

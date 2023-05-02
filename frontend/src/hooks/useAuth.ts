@@ -5,10 +5,12 @@ import { useNavigate } from "react-router-dom";
 
 import { IUser } from "../interfaces/IUser";
 import useFlashMessage from "./useFlashMessage";
+import { ILogin } from "../interfaces/ILogin";
 
 interface IUseAuth {
   authenticated: boolean;
   register: (user: IUser) => Promise<void>;
+  login: (user: ILogin) => Promise<void>;
   logout: () => void;
 }
 
@@ -53,6 +55,25 @@ export function useAuth(): IUseAuth {
     setFlashMessage(msgText, msgType);
   }
 
+  async function login(user: ILogin): Promise<void> {
+    let msgText = "Login realizado com sucesso!";
+    let msgType = "success";
+
+    try {
+      const data = await api.post("/users/login", user).then((response) => {
+        return response.data;
+      });
+
+      await authUser(data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      msgText = error.response.data.message;
+      msgType = "error";
+    }
+
+    setFlashMessage(msgText, msgType);
+  }
+
   async function authUser(data: authUserData): Promise<void> {
     setAuthenticated(true);
 
@@ -73,5 +94,5 @@ export function useAuth(): IUseAuth {
     setFlashMessage(msgText, msgType);
   }
 
-  return { authenticated, register, logout };
+  return { authenticated, register, login, logout };
 }
