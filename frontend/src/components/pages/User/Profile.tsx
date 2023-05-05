@@ -6,6 +6,7 @@ import Input from "../../form/Input";
 import { IUser } from "../../../interfaces/IUser";
 import api from "../../../utils/api";
 import useFlashMessage from "../../../hooks/useFlashMessage";
+import RoundedImage from "../../layout/RoundedImage";
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<IUser>({
@@ -82,7 +83,7 @@ const Profile: React.FC = () => {
       <div className="profile_header">
         <h1>Perfil</h1>
         {(user.image || preview) && (
-          <img
+          <RoundedImage
             src={
               preview
                 ? URL.createObjectURL(preview)
