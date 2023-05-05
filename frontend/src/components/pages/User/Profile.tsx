@@ -1,9 +1,10 @@
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 
 import "./Profile.css";
 import "../../form/Form.css";
 import Input from "../../form/Input";
 import { IUser } from "../../../interfaces/IUser";
+import api from "../../../utils/api";
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<IUser>({
@@ -13,6 +14,19 @@ const Profile: React.FC = () => {
     password: "",
     confirmpassword: "",
   });
+  const [token] = useState(localStorage.getItem("token") || "");
+
+  useEffect(() => {
+    api
+      .get("/users/checkuser", {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+        },
+      })
+      .then((response) => {
+        setUser(response.data);
+      });
+  }, [token]);
 
   const onFileChange = (e: SyntheticEvent<HTMLInputElement>) => {
     console.log(e);
