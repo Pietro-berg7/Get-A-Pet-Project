@@ -5,6 +5,7 @@ import "../../form/Form.css";
 import Input from "../../form/Input";
 import { IUser } from "../../../interfaces/IUser";
 import api from "../../../utils/api";
+import useFlashMessage from "../../../hooks/useFlashMessage";
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<IUser>({
@@ -13,8 +14,10 @@ const Profile: React.FC = () => {
     phone: "",
     password: "",
     confirmpassword: "",
+    image: null,
   });
   const [token] = useState(localStorage.getItem("token") || "");
+  const { setFlashMessage } = useFlashMessage();
 
   useEffect(() => {
     api
@@ -29,16 +32,46 @@ const Profile: React.FC = () => {
   }, [token]);
 
   const onFileChange = (e: SyntheticEvent<HTMLInputElement>) => {
-    console.log(e);
+    const files = e.currentTarget.files;
+    setUser({
+      ...user,
+      [e.currentTarget.name as keyof IUser]: files ? files[0] : null,
+    });
   };
 
   const handleChange = (e: SyntheticEvent<HTMLInputElement>) => {
-    console.log(e);
-    // setUser({ ...user, [e.currentTarget.name]: e.currentTarget.value });
+    setUser({ ...user, [e.currentTarget.name]: e.currentTarget.value });
   };
 
-  const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    let msgType = "success";
+
+    const formData = new FormData();
+
+    console.log(user);
+
+    await Object.keys(user).forEach((key) => {
+      formData.append(key, (user as any)[key]);
+    });
+
+    const data = await api
+      .patch(`/users/edit/${user._id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((err) => {
+        msgType = "error";
+        return err.response.data;
+      });
+
+    setFlashMessage(data.message, msgType);
   };
 
   return (
