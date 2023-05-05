@@ -16,6 +16,7 @@ const Profile: React.FC = () => {
     confirmpassword: "",
     image: null,
   });
+  const [preview, setPreview] = useState<File | null>(null);
   const [token] = useState(localStorage.getItem("token") || "");
   const { setFlashMessage } = useFlashMessage();
 
@@ -33,6 +34,7 @@ const Profile: React.FC = () => {
 
   const onFileChange = (e: SyntheticEvent<HTMLInputElement>) => {
     const files = e.currentTarget.files;
+    setPreview(files ? files[0] : null);
     setUser({
       ...user,
       [e.currentTarget.name as keyof IUser]: files ? files[0] : null,
@@ -50,9 +52,8 @@ const Profile: React.FC = () => {
 
     const formData = new FormData();
 
-    console.log(user);
-
     await Object.keys(user).forEach((key) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formData.append(key, (user as any)[key]);
     });
 
@@ -74,11 +75,22 @@ const Profile: React.FC = () => {
     setFlashMessage(data.message, msgType);
   };
 
+  const apiURL = "http://localhost:5000";
+
   return (
     <section className="form_container">
       <div className="profile_header">
         <h1>Perfil</h1>
-        <p>Preview imagem</p>
+        {(user.image || preview) && (
+          <img
+            src={
+              preview
+                ? URL.createObjectURL(preview)
+                : `${apiURL}/images/users/${user.image}`
+            }
+            alt={user.name}
+          />
+        )}
       </div>
       <form onSubmit={handleSubmit}>
         <Input

@@ -5,10 +5,7 @@ import { getUserByToken } from "../helpers/getUserByToken";
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import {
-  validateRegister,
-  validateLogin,
-} from "../middlewares/validations";
+import { validateRegister, validateLogin } from "../middlewares/validations";
 import { verifyToken } from "../middlewares/verifyToken";
 import { IUser } from "../interfaces/IUser";
 
@@ -88,8 +85,6 @@ export class UserController {
 
     if (req.headers.authorization) {
       const token = getToken(req);
-
-      console.log(req.headers.authorization);
 
       if (token) {
         const decoded = jwt.verify(token, "nossosecret") as JwtPayload;
