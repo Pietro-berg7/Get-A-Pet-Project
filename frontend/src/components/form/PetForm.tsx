@@ -14,23 +14,57 @@ interface PetForm {
 
 const PetForm: React.FC<PetForm> = ({ handleSubmit, petData, btnText }) => {
   const [pet, setPet] = useState<IPet>(petData || {});
-  const [preview, setPreview] = useState([]);
+  const [preview, setPreview] = useState<File[]>([]);
   const colors = ["Branco", "Preto", "Cinza", "Caramelo", "Mesclado"];
 
   const onFileChange = (e: SyntheticEvent<HTMLInputElement>) => {
-    console.log(e);
+    const files = e.currentTarget.files;
+    if (files !== null) {
+      setPreview(Array.from(files));
+      setPet({ ...pet, images: files });
+    }
   };
 
   const handleChange = (e: SyntheticEvent<HTMLInputElement>) => {
-    console.log(e);
+    setPet({ ...pet, [e.currentTarget.name]: e.currentTarget.value });
   };
 
   function handleColor(e: ChangeEvent<HTMLSelectElement>) {
-    console.log(e);
+    setPet({
+      ...pet,
+      color: e.currentTarget.options[e.currentTarget.selectedIndex].text,
+    });
   }
 
+  function submit(e: SyntheticEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    console.log(pet);
+    // handleSubmit(pet);
+  }
+
+  const apiURL = "http://localhost:5000";
+
   return (
-    <form className="form_container">
+    <form onSubmit={submit} className="form_container">
+      <div className="preview_pet_images">
+        {preview.length > 0
+          ? preview.map((image, index) => (
+              <img
+                src={URL.createObjectURL(image)}
+                alt={pet.name}
+                key={`${pet.name}+${index}`}
+              />
+            ))
+          : pet.images &&
+            Array.from(pet.images).map((image, index) => (
+              <img
+                src={`${apiURL}/images/pets/${image}`}
+                alt={pet.name}
+                key={`${pet.name}+${index}`}
+              />
+            ))}
+      </div>
       <Input
         text="Imagens do Pet"
         type="file"

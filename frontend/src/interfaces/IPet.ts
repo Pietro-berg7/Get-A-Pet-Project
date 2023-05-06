@@ -3,4 +3,5 @@ export interface IPet {
   age: string;
   weight: string;
   color: string;
+  images: FileList;
 }
