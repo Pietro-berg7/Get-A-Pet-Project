@@ -4,6 +4,8 @@ import api from "../../../utils/api";
 
 import useFlashMessage from "../../../hooks/useFlashMessage";
 
+import PetForm from "../../form/PetForm";
+
 import "./AddPet.css";
 
 const AddPet: React.FC = () => {
@@ -13,7 +15,7 @@ const AddPet: React.FC = () => {
         <h1>Cadastre um Pet</h1>
         <p>Depois ele ficará disponível para adoção</p>
       </div>
-      <p>Formulário</p>
+      <PetForm btnText="Cadastrar Pet" />
     </section>
   );
 };

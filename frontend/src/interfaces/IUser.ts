@@ -5,5 +5,5 @@ export interface IUser {
   phone: string;
   password?: string;
   confirmpassword?: string;
-  image: File | null;
+  image?: File | null;
 }
