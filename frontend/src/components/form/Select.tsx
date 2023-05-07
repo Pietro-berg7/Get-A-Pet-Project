@@ -21,6 +21,9 @@ const Select: React.FC<SelectProps> = ({
     <div className="form_control">
       <label htmlFor={name}>{text}:</label>
       <select name={name} id={name} onChange={handleChange} value={value || ""}>
+        <option value="" disabled>
+          Selecione uma opção
+        </option>
         {options.map((option) => (
           <option key={option} value={option}>
             {option}

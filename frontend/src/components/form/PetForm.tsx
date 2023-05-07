@@ -7,13 +7,13 @@ import { IPet } from "../../interfaces/IPet";
 import Select from "./Select";
 
 interface PetForm {
-  handleSubmit: () => void;
-  petData: IPet;
+  handleSubmit: (pet: IPet) => void;
+  petData?: IPet;
   btnText: string;
 }
 
 const PetForm: React.FC<PetForm> = ({ handleSubmit, petData, btnText }) => {
-  const [pet, setPet] = useState<IPet>(petData || {});
+  const [pet, setPet] = useState<IPet>(petData || ({} as IPet));
   const [preview, setPreview] = useState<File[]>([]);
   const colors = ["Branco", "Preto", "Cinza", "Caramelo", "Mesclado"];
 
@@ -39,8 +39,7 @@ const PetForm: React.FC<PetForm> = ({ handleSubmit, petData, btnText }) => {
   function submit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    console.log(pet);
-    // handleSubmit(pet);
+    handleSubmit(pet);
   }
 
   const apiURL = "http://localhost:5000";

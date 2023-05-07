@@ -50,15 +50,15 @@ const petSchema: Schema = new Schema(
       _id: {
         type: Schema.Types.ObjectId,
         ref: "User",
-        required: true,
+        required: false,
       },
       name: {
         type: String,
-        required: true,
+        required: false,
       },
       image: {
         type: String,
-        required: true,
+        required: false,
       },
     },
   },
