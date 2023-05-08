@@ -5,7 +5,7 @@ import "./RoundedImage.css";
 interface Image {
   src: string;
   alt: string;
-  width?: number;
+  width?: string;
 }
 
 const RoundedImage: React.FC<Image> = ({ src, alt, width }) => {

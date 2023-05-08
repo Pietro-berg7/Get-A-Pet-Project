@@ -4,4 +4,6 @@ export interface IPet {
   weight: string;
   color: string;
   images: FileList;
+  available: boolean;
+  adopter?: object;
 }
