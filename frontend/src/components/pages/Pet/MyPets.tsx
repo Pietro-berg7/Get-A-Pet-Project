@@ -28,6 +28,29 @@ const MyPets: React.FC = () => {
       });
   }, [token]);
 
+  const removePet = async (id: string) => {
+    let msgType = "success";
+
+    const data = await api
+      .delete(`/pets/${id}`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+        },
+      })
+      .then((response) => {
+        const updatedPets = pets.filter((pet: Pet) => pet._id != id);
+        setPets(updatedPets);
+        return response.data;
+      })
+      .catch((err) => {
+        msgType = "error";
+
+        return err.response.data;
+      });
+
+    setFlashMessage(data.message, msgType);
+  };
+
   const apiURL = "http://localhost:5000";
 
   return (
@@ -53,7 +76,13 @@ const MyPets: React.FC = () => {
                       <button className="conclude_btn">Concluir adoção</button>
                     )}
                     <Link to={`/pet/edit/${pet._id}`}>Editar</Link>
-                    <button>Excluir</button>
+                    <button
+                      onClick={() => {
+                        removePet(pet._id);
+                      }}
+                    >
+                      Excluir
+                    </button>
                   </>
                 ) : (
                   <p>Pet já adotado</p>
