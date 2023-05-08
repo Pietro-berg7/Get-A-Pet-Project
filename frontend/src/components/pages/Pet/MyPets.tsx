@@ -32,22 +32,26 @@ const MyPets: React.FC = () => {
 
   return (
     <section>
-      <h1>My Pets</h1>
-      <Link to="/pet/add">Cadastrar Pet</Link>
-      <div>
+      <div className="petlist_header">
+        <h1>My Pets</h1>
+        <Link to="/pet/add">Cadastrar Pet</Link>
+      </div>
+      <div className="petlist_container">
         {pets.length > 0 &&
           pets.map((pet: Pet) => (
-            <div key={pet._id}>
+            <div className="petlist_row" key={pet._id}>
               <RoundedImage
                 src={`${apiURL}/images/pets/${pet.images[0]}`}
                 alt={pet.name}
-                width="75px"
+                width="px75"
               />
               <span className="bold">{pet.name}</span>
-              <div className="action">
+              <div className="actions">
                 {pet.available ? (
                   <>
-                    {pet.adopter && <button>Concluir adoção</button>}
+                    {pet.adopter && (
+                      <button className="conclude_btn">Concluir adoção</button>
+                    )}
                     <Link to={`/pet/edit/${pet._id}`}>Editar</Link>
                     <button>Excluir</button>
                   </>
