@@ -38,7 +38,7 @@ const MyPets: React.FC = () => {
         },
       })
       .then((response) => {
-        const updatedPets = pets.filter((pet: Pet) => pet._id != id);
+        const updatedPets = pets.filter((pet: Pet) => pet._id !== id);
         setPets(updatedPets);
         return response.data;
       })
