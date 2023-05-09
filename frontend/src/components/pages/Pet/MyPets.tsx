@@ -47,6 +47,27 @@ const MyPets: React.FC = () => {
     setFlashMessage(data.message, msgType);
   };
 
+  const concludeAdoption = async (id: string) => {
+    let msgType = "success";
+
+    const data = await api
+      .patch(`/pets/conclude/${id}`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+        },
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((err) => {
+        msgType = "error";
+
+        return err.response.data;
+      });
+
+    setFlashMessage(data.message, msgType);
+  };
+
   const apiURL = "http://localhost:5000";
 
   return (
@@ -69,7 +90,14 @@ const MyPets: React.FC = () => {
                 {pet.available ? (
                   <>
                     {pet.adopter && (
-                      <button className="conclude_btn">Concluir adoção</button>
+                      <button
+                        className="conclude_btn"
+                        onClick={() => {
+                          concludeAdoption(pet._id);
+                        }}
+                      >
+                        Concluir adoção
+                      </button>
                     )}
                     <Link to={`/pet/edit/${pet._id}`}>Editar</Link>
                     <button
