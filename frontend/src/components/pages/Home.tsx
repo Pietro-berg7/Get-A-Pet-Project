@@ -25,7 +25,7 @@ const Home: React.FC = () => {
       <div className="pet_container">
         {pets.length > 0 &&
           pets.map((pet: IPet) => (
-            <div className="pet_card">
+            <div key={pet._id} className="pet_card">
               <div
                 style={{
                   backgroundImage: `url(${apiURL}/images/pets/${pet.images[0]})`,
