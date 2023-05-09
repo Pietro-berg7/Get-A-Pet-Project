@@ -1,0 +1,8 @@
+node_modules
+
+public/images/pets/*.png
+public/images/pets/*.jpg
+public/images/users/*.png
+public/images/users/*.jpg
+
+.env
