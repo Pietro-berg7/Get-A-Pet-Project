@@ -1,3 +1,5 @@
+import { IUser } from "./IUser";
+
 export interface IPet {
   _id: string;
   name: string;
@@ -6,5 +8,6 @@ export interface IPet {
   color: string;
   images: FileList;
   available: boolean;
+  user: IUser;
   adopter?: object;
 }
