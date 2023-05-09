@@ -14,17 +14,24 @@ const Home: React.FC = () => {
     });
   }, []);
 
+  const apiURL = "http://localhost:5000";
+
   return (
     <section>
-      <div>
+      <div className="pet_home_header">
         <h1>Adote um Pet</h1>
         <p>Veja os detalhes de cada um e conheça o tutor deles</p>
       </div>
-      <div>
+      <div className="pet_container">
         {pets.length > 0 &&
           pets.map((pet: IPet) => (
-            <div>
-              <p>Imagem do Pet</p>
+            <div className="pet_card">
+              <div
+                style={{
+                  backgroundImage: `url(${apiURL}/images/pets/${pet.images[0]})`,
+                }}
+                className="pet_card_image"
+              ></div>
               <h3>{pet.name}</h3>
               <p>
                 <span className="bold">Peso: </span> {pet.weight}kg
@@ -32,7 +39,7 @@ const Home: React.FC = () => {
               {pet.available ? (
                 <Link to={`pet/${pet._id}`}>Mais detalhes</Link>
               ) : (
-                <p>Adotado</p>
+                <p className="adopted_text">Adotado</p>
               )}
             </div>
           ))}
