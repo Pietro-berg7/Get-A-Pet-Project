@@ -8,12 +8,8 @@ import "./AddPet.css";
 import useFlashMessage from "../../../hooks/useFlashMessage";
 import { IPet } from "../../../interfaces/IPet";
 
-interface Pet extends IPet {
-  _id: string;
-}
-
 const EditPet: React.FC = () => {
-  const [pet, setPet] = useState<Pet>({
+  const [pet, setPet] = useState<IPet>({
     _id: "",
     name: "",
     age: "",
@@ -39,7 +35,7 @@ const EditPet: React.FC = () => {
       });
   }, [token, id]);
 
-  const updatedPet = async (pet: Pet) => {
+  const updatedPet = async (pet: IPet) => {
     let msgType = "success";
 
     const formData = new FormData();

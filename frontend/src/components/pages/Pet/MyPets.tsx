@@ -7,10 +7,6 @@ import { IPet } from "../../../interfaces/IPet";
 
 import "./Dashboard.css";
 
-interface Pet extends IPet {
-  _id: string;
-}
-
 const MyPets: React.FC = () => {
   const [pets, setPets] = useState([]);
   const [token] = useState(localStorage.getItem("token") || "");
@@ -38,7 +34,7 @@ const MyPets: React.FC = () => {
         },
       })
       .then((response) => {
-        const updatedPets = pets.filter((pet: Pet) => pet._id !== id);
+        const updatedPets = pets.filter((pet: IPet) => pet._id !== id);
         setPets(updatedPets);
         return response.data;
       })
@@ -61,7 +57,7 @@ const MyPets: React.FC = () => {
       </div>
       <div className="petlist_container">
         {pets.length > 0 &&
-          pets.map((pet: Pet) => (
+          pets.map((pet: IPet) => (
             <div className="petlist_row" key={pet._id}>
               <RoundedImage
                 src={`${apiURL}/images/pets/${pet.images[0]}`}
