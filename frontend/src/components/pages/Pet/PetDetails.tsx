@@ -32,12 +32,12 @@ const PetDetails: React.FC = () => {
   return (
     <>
       {pet.name && (
-        <section>
-          <div>
+        <section className="pet_details_container">
+          <div className="pet_details_header">
             <h1>Conhecendo o Pet: {pet.name}</h1>
             <p>Se tiver interesse, marque uma visita para conhecê-lo</p>
           </div>
-          <div>
+          <div className="pet_images">
             {pet.images.map((image, index) => (
               <img
                 src={`${apiURL}/images/pets/${image}`}

@@ -1,5 +1,6 @@
 import multer from "multer";
 import path from "path";
+import { v4 as uuidv4 } from "uuid";
 
 // Destination to store the images
 const imageStorage = multer.diskStorage({
@@ -15,7 +16,8 @@ const imageStorage = multer.diskStorage({
     cb(null, `public/images/${folder}`);
   },
   filename: function (_req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
+    const uniqueFilename = `${uuidv4()}${path.extname(file.originalname)}`;
+    cb(null, uniqueFilename);
   },
 });
 
