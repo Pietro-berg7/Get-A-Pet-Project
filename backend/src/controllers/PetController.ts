@@ -217,7 +217,7 @@ export class PetController {
       age,
       weight,
       color,
-      images: [],
+      images: pet.images,
     };
 
     // validations
@@ -241,14 +241,14 @@ export class PetController {
     } else {
       updatedData.color = color;
     }
-    if (!Array.isArray(images) || images.length === 0) {
-      return res.status(422).json({ message: "A imagem é obrigatória!" });
-    } else {
-      updatedData.images = [];
+    if (Array.isArray(images)) {
+      if (images.length > 0) {
+        updatedData.images = [];
 
-      images.map((image) => {
-        updatedData.images.push(image.filename);
-      });
+        images.map((image) => {
+          updatedData.images.push(image.filename);
+        });
+      }
     }
 
     await Pet.findByIdAndUpdate(id, updatedData);
