@@ -14,7 +14,7 @@ const app = express();
 app.use(express.json());
 
 // Solve CORS
-app.use(cors({ credentials: true, origin: "http://127.0.0.1:5173" }));
+app.use(cors());
 
 // Public folder for images
 app.use(express.static("public"));

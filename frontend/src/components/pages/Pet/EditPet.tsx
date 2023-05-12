@@ -7,6 +7,7 @@ import "./AddPet.css";
 
 import useFlashMessage from "../../../hooks/useFlashMessage";
 import { IPet } from "../../../interfaces/IPet";
+import { IUser } from "../../../interfaces/IUser";
 
 const EditPet: React.FC = () => {
   const [pet, setPet] = useState<IPet>({
@@ -17,6 +18,7 @@ const EditPet: React.FC = () => {
     color: "",
     images: {} as FileList,
     available: true,
+    user: {} as IUser,
     adopter: {},
   });
   const [token] = useState(localStorage.getItem("token") || "");
