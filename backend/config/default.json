@@ -1,4 +1,4 @@
 {
-  "mongoURI": "mongodb://localhost:27017/getapet",
+  "mongoURI": "mongodb+srv://root:9yFw2wiTZQ4f2TJf@cluster0.lyb5jkl.mongodb.net/mydatabase?retryWrites=true&w=majority",
   "port": 27017
 }

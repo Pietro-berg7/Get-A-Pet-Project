@@ -1,5 +1,4 @@
-import { Document, ObjectId, Types } from "mongoose";
-import { IUser } from "./IUser";
+import { Document } from "mongoose";
 
 export interface IPet extends Document {
   name: string;

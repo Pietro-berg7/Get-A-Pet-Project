@@ -39,7 +39,7 @@ const petSchema: Schema = new Schema(
       },
       image: {
         type: String,
-        required: true,
+        required: false,
       },
       phone: {
         type: String,
